@@ -50,10 +50,27 @@ Response:
 - 200 OK
   - `message`: "Login successful"
   - `token`: JWT token
-- 400 Bad Request
-  - validation errors
 - 401 Unauthorized
-  - invalid email or password
+  - `message`: "Invalid email or password"
+
+### GET /users/profile
+Retrieve the authenticated user's profile information.
+
+**Authentication required:** Bearer token in Authorization header or token cookie.
+
+Response:
+- 200 OK
+  - `message`: "User profile retrieved successfully"
+  - `user`: User object (excluding password)
+
+### GET /users/logout
+Log out the authenticated user by clearing the authentication token.
+
+**Authentication required:** Bearer token in Authorization header or token cookie.
+
+Response:
+- 200 OK
+  - `message`: "Logout successful"
 
 ## Notes
 - Passwords are hashed using `bcrypt` before storage.

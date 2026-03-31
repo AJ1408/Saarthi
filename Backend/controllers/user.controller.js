@@ -57,6 +57,7 @@ module.exports.login = async (req, res, next) => {
 
     const token = user.generateAuthToken();
 
+    res.cookie("token", token); // Set token in cookie
     res.status(200).json({
         message: "Login successful",
         token
@@ -65,4 +66,16 @@ module.exports.login = async (req, res, next) => {
 
 module.exports.getUserProfile = async (req, res, next) => {
 
+    res.status(200).json({
+        message: "User profile retrieved successfully",
+        user: req.user
+    });
+
+}
+
+module.exports.logout = async (req, res, next) => {
+    res.clearCookie("token"); // Clear the token cookie
+    res.status(200).json({
+        message: "Logout successful"
+    });
 }

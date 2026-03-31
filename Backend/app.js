@@ -11,6 +11,8 @@ const connectToDb = require('./db/db');
 connectToDb();
 
 const userRoutes = require("./routes/user.routes");
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 
 app.use(cors());
 app.use(express.json());
