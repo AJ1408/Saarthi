@@ -19,6 +19,7 @@ router.post("/login", [
 console.log("REGISTER:", userController.register);
 console.log("LOGIN:", userController.login);
 
+router.get("/profile" , userController.getUserProfile);
+
 
 module.exports = router;
-
