@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {CaptainDataContext} from "../context/CaptainContext";
+import { useContext } from "react";
+import axios from "axios";
 
 const CaptainSignup = () => {
   const [email, setEmail] = useState("");
@@ -13,15 +16,17 @@ const CaptainSignup = () => {
   const [vehiclePlate, setVehiclePlate] = useState("");
   const [vehicleCapacity, setVehicleCapacity] = useState("");
   const [vehicleType, setVehicleType] = useState("");
-  const [locationLat, setLocationLat] = useState("");
-  const [locationLng, setLocationLng] = useState("");
+  // const [locationLat, setLocationLat] = useState("");
+  // const [locationLng, setLocationLng] = useState("");
+   const navigate = useNavigate(); // Hook for navigation
+    const {captain, setCaptain} = useContext(CaptainDataContext); 
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setUserData({
-     username:{
-      firstName: firstName,
-      lastName: lastName,
+    const captainData = {
+     fullname:{
+      firstname: firstName,
+      lastname: lastName,
      },
       email: email,
       password: password,
@@ -30,14 +35,18 @@ const CaptainSignup = () => {
         plate: vehiclePlate,
         capacity: parseInt(vehicleCapacity),
         vehicleType: vehicleType,
-      },
-      location: {
-        lat: parseFloat(locationLat),
-        lng: parseFloat(locationLng),
-      },
-    });
-    console.log(userData);
-    
+      }
+    };
+    console.log(captainData);
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captain/registerCaptain`, captainData)
+    console.log(response.data);
+    if(response.status === 201){
+      alert("Captain registered successfully!");
+      const data = response.data;
+      setCaptain(data);
+      localStorage.setItem("token", data.token);
+      navigate('/captainLogin'); // Navigate to home page after successful signup}=
+    }
     // Clear all fields
     setFirstName("");
     setLastName("");
@@ -47,8 +56,8 @@ const CaptainSignup = () => {
     setVehiclePlate("");
     setVehicleCapacity("");
     setVehicleType("");
-    setLocationLat("");
-    setLocationLng("");
+    // setLocationLat("");
+    // setLocationLng("");
   };
 
   return (
@@ -179,7 +188,7 @@ const CaptainSignup = () => {
           </div>
           
           {/* Location Fields - Latitude and Longitude side by side */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Location (Latitude)
@@ -207,7 +216,7 @@ const CaptainSignup = () => {
                 placeholder="e.g., -122.4194"
               />
             </div>
-          </div>
+          </div> */}
           
           <button
             type="submit"
